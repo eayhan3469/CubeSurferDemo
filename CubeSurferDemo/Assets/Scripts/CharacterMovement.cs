@@ -40,14 +40,12 @@ public class CharacterMovement : MonoBehaviour
     {
         if (other.tag == "RightCurve")
         {
-            Debug.Log("RightCurve");
             other.GetComponent<BoxCollider>().enabled = false;
             Character.Instance.Direction += 1;
             StartRotating(90);
         }
         else if (other.tag == "LeftCurve")
         {
-            Debug.Log("LeftCurve");
             other.GetComponent<BoxCollider>().enabled = false;
             Character.Instance.Direction -= 1;
             StartRotating(-90);

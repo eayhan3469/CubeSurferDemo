@@ -44,7 +44,6 @@ public class SwerveMovement : MonoBehaviour
             _road = collision.gameObject.transform;
             _isOnWay = true;
             CalculateEdges(_direction);
-            Debug.Log("onroad");
         }
     }
 
