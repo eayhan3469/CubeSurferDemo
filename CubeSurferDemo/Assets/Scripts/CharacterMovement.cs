@@ -22,15 +22,15 @@ public class CharacterMovement : MonoBehaviour
     {
         if (_rotationProgress < 1 && _rotationProgress >= 0)
         {
-            _rotationProgress += Time.deltaTime;
+            _rotationProgress += Time.deltaTime * 2f;
 
             transform.rotation = Quaternion.Lerp(_startRotation, _endRotation, _rotationProgress);
             _mainCam.transform.rotation = Quaternion.Lerp(_startRotation, _endRotation, _rotationProgress);
-
-            if (Quaternion.Angle(_startRotation, _endRotation) > 1f)
-                Character.Instance.IsRotating = true;
-            else
-                Character.Instance.IsRotating = false;
+            Character.Instance.IsRotating = true;
+        }
+        else
+        {
+            Character.Instance.IsRotating = false;
         }
 
         transform.Translate(Vector3.forward * Time.deltaTime * _speed);

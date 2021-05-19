@@ -56,12 +56,12 @@ public class SwerveMovement : MonoBehaviour
 
     public void CalculateEdges(int direction)
     {
-        if (direction == 0)
+        if (direction == 0 || direction == 2)
         {
             _maxPos = _road.position.x + (_road.localScale.x / 2 - 0.1f);
             _minPos = _road.position.x + (0.1f - _road.localScale.x / 2);
         }
-        else if (direction == 1)
+        else if (direction == 1 || direction == 3)
         {
             _maxPos = _road.position.z + (_road.localScale.x / 2 - 0.1f);
             _minPos = _road.position.z + (0.1f - _road.localScale.x / 2);
@@ -70,17 +70,16 @@ public class SwerveMovement : MonoBehaviour
 
     private void Update()
     {
-        _swerveAmount = Time.deltaTime * swerveSpeed * _swerveInputSystem.MoveFactorX;
-        _swerveAmount = Mathf.Clamp(_swerveAmount, -maxSwerveAmount, maxSwerveAmount);
-        transform.Translate(_swerveAmount, 0f, 0f);
-
-        float clampedPos = Mathf.Clamp(transform.position.x, _minPos, _maxPos);
-
         if (!Character.Instance.IsRotating)
         {
+            _swerveAmount = Time.deltaTime * swerveSpeed * _swerveInputSystem.MoveFactorX;
+            _swerveAmount = Mathf.Clamp(_swerveAmount, -maxSwerveAmount, maxSwerveAmount);
+            transform.Translate(_swerveAmount, 0f, 0f);
             _direction = Character.Instance.Direction;
             CalculateEdges(_direction);
         }
+
+        float clampedPos = Mathf.Clamp(transform.position.x, _minPos, _maxPos);
 
         if (_isOnWay)
         {
