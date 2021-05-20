@@ -11,6 +11,9 @@ public class Character : MonoBehaviour
     private float speed;
 
     [SerializeField]
+    private float jumpPower;
+
+    [SerializeField]
     private Transform cubesParent;
 
     [SerializeField]
@@ -59,7 +62,7 @@ public class Character : MonoBehaviour
 
     public void AddCube()
     {
-        GetComponent<Rigidbody>().AddForce(Vector3.up * 100f);
+        GetComponent<Rigidbody>().AddForce(Vector3.up * jumpPower);
         ResizeCollider();
         var cubePosition = new Vector3(0f, Cubes[Cubes.Count - 1].transform.localPosition.y - cubeObject.transform.localScale.y, 0f);
         var cube = Instantiate(cubeObject, cubesParent);
