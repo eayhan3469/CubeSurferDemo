@@ -6,7 +6,7 @@ public class Cube : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "ObstacleCube")
+        if (other.tag == "ObstacleCube" || other.tag == "Altitude")
         {
             transform.parent = other.transform;
             Character.Instance.RemoveCube(this);

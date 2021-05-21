@@ -109,7 +109,6 @@ public class Character : MonoBehaviour
                 Destroy(Cubes[Cubes.Count - 1].gameObject);
                 Cubes.Remove(Cubes[Cubes.Count - 1]);
                 ShrinkCollider();
-                Debug.Log(Cubes.Count);
             }
         }
     }
@@ -126,18 +125,8 @@ public class Character : MonoBehaviour
 
     public void RemoveCube(Cube cube)
     {
-        foreach (var c in Cubes)
-            c.GetComponent<BoxCollider>().isTrigger = false;
-
         Cubes.Remove(cube);
         ShrinkCollider();
-        Invoke("EnableCubeTriggers", 0.25f);
-    }
-
-    private void EnableCubeTriggers()
-    {
-        foreach (var c in Cubes)
-            c.GetComponent<BoxCollider>().isTrigger = true;
     }
 
     public void EnlargeCollider()
