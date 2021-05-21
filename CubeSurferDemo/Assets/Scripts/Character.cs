@@ -35,6 +35,8 @@ public class Character : MonoBehaviour
 
     public List<Cube> Cubes;
     private BoxCollider _characterCollider;
+    private float _lavaTime = 0f;
+    private float _lavaTimeInterval = 0.025f;
 
     private void Start()
     {
@@ -60,6 +62,23 @@ public class Character : MonoBehaviour
         }
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.tag == "Lava")
+        {
+            _lavaTime += Time.deltaTime;
+
+            if (_lavaTime >= _lavaTimeInterval)
+            {
+                _lavaTime = 0f;
+                Destroy(Cubes[Cubes.Count-1].gameObject);
+                Cubes.Remove(Cubes[Cubes.Count - 1]);
+                ShrinkCollider();
+                Debug.Log(Cubes.Count);
+            }
+        }
+    }
+
     public void AddCube()
     {
         GetComponent<Rigidbody>().AddForce(Vector3.up * jumpPower);
@@ -70,22 +89,21 @@ public class Character : MonoBehaviour
         cube.transform.localPosition = cubePosition;
     }
 
-    public async void RemoveCube(Cube cube)
+    public void RemoveCube(Cube cube)
     {
         foreach (var c in Cubes)
             c.GetComponent<BoxCollider>().isTrigger = false;
 
-        await Task.Run(() =>
-        {
-            Task.Delay(500);
-        });
-
         Cubes.Remove(cube);
         ShrinkCollider();
+        Invoke("EnableCubeTriggers", 0.25f);
+    }
 
+    private void EnableCubeTriggers()
+    {
         foreach (var c in Cubes)
             c.GetComponent<BoxCollider>().isTrigger = true;
-    }
+    } 
 
     public void EnlargeCollider()
     {
