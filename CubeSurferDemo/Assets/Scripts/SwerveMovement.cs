@@ -57,8 +57,8 @@ public class SwerveMovement : MonoBehaviour
     {
         if (direction == 0 || direction == 2)
         {
-            _maxPos = _road.position.x + (_road.localScale.x / 2 - 0.1f);
-            _minPos = _road.position.x + (0.1f - _road.localScale.x / 2);
+            _maxPos = _road.position.x + (_road.localScale.x / 2 - 0.05f);
+            _minPos = _road.position.x + (0.05f - _road.localScale.x / 2);
         }
         else if (direction == 1 || direction == 3)
         {

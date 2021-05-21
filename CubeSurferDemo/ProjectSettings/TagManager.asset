@@ -8,6 +8,7 @@ TagManager:
   - LeftCurve
   - Road
   - CollectableCube
+  - ObstacleCube
   layers:
   - Default
   - TransparentFX

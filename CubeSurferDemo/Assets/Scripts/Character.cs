@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Character : MonoBehaviour
@@ -39,7 +40,7 @@ public class Character : MonoBehaviour
     {
         _characterCollider = gameObject.GetComponent<BoxCollider>();
         Cubes.AddRange(GetComponentsInChildren<Cube>());
-        ResizeCollider();
+        EnlargeCollider();
     }
 
     void Awake()
@@ -56,23 +57,45 @@ public class Character : MonoBehaviour
         {
             AddCube();
             Destroy(collision.gameObject);
-            Debug.Log("1");
         }
     }
 
     public void AddCube()
     {
         GetComponent<Rigidbody>().AddForce(Vector3.up * jumpPower);
-        ResizeCollider();
+        EnlargeCollider();
         var cubePosition = new Vector3(0f, Cubes[Cubes.Count - 1].transform.localPosition.y - cubeObject.transform.localScale.y, 0f);
         var cube = Instantiate(cubeObject, cubesParent);
         Cubes.Add(cube.GetComponent<Cube>());
         cube.transform.localPosition = cubePosition;
     }
 
-    public void ResizeCollider()
+    public async void RemoveCube(Cube cube)
+    {
+        foreach (var c in Cubes)
+            c.GetComponent<BoxCollider>().isTrigger = false;
+
+        await Task.Run(() =>
+        {
+            Task.Delay(500);
+        });
+
+        Cubes.Remove(cube);
+        ShrinkCollider();
+
+        foreach (var c in Cubes)
+            c.GetComponent<BoxCollider>().isTrigger = true;
+    }
+
+    public void EnlargeCollider()
     {
         _characterCollider.size = new Vector3(_characterCollider.size.x, _characterCollider.size.y + 1f, _characterCollider.size.z);
         _characterCollider.center = new Vector3(_characterCollider.center.x, _characterCollider.center.y - 0.5f, _characterCollider.center.z);
+    }
+
+    public void ShrinkCollider()
+    {
+        _characterCollider.size = new Vector3(_characterCollider.size.x, _characterCollider.size.y - 1f, _characterCollider.size.z);
+        _characterCollider.center = new Vector3(_characterCollider.center.x, _characterCollider.center.y + 0.5f, _characterCollider.center.z);
     }
 }
