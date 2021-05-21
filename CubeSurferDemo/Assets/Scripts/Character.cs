@@ -20,6 +20,12 @@ public class Character : MonoBehaviour
     [SerializeField]
     private GameObject cubeObject;
 
+    [SerializeField]
+    private Transform trailObject;
+
+    [SerializeField]
+    private Material trailMaterial;
+
     public static Character Instance { get; private set; }
     public GameObject CharacterObject
     {
@@ -32,11 +38,12 @@ public class Character : MonoBehaviour
         get { return speed; }
         set { speed = value; }
     }
-
     public List<Cube> Cubes;
+
     private BoxCollider _characterCollider;
     private float _lavaTime = 0f;
     private float _lavaTimeInterval = 0.025f;
+    private Collider _groundCollider;
 
     private void Start()
     {
@@ -53,6 +60,12 @@ public class Character : MonoBehaviour
             Instance = this;
     }
 
+    private void Update()
+    {
+        Vector3 closestOnGround = _groundCollider.ClosestPointOnBounds(transform.position);
+        LeaveTrail(closestOnGround, cubeObject.transform.localScale.x, trailMaterial);
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "CollectableCube")
@@ -60,6 +73,28 @@ public class Character : MonoBehaviour
             AddCube();
             Destroy(collision.gameObject);
         }
+
+        if (collision.gameObject.tag == "Road" || collision.gameObject.tag == "Bridge")
+        {
+            _groundCollider = collision.gameObject.GetComponent<Collider>();
+        }
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+
+    }
+
+    private void LeaveTrail(Vector3 point, float scale, Material material)
+    {
+        GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Quad);
+        sphere.transform.localScale = Vector3.one * scale;
+        sphere.transform.position = point + new Vector3(0f, 0.01f, 0f);
+        sphere.transform.rotation = Quaternion.Euler(new Vector3(90f, 0f, 0f));
+        sphere.transform.parent = trailObject;
+        sphere.GetComponent<Collider>().enabled = false;
+        sphere.GetComponent<Renderer>().material = material;
+        Destroy(sphere, 3f);
     }
 
     private void OnTriggerStay(Collider other)
@@ -71,7 +106,7 @@ public class Character : MonoBehaviour
             if (_lavaTime >= _lavaTimeInterval)
             {
                 _lavaTime = 0f;
-                Destroy(Cubes[Cubes.Count-1].gameObject);
+                Destroy(Cubes[Cubes.Count - 1].gameObject);
                 Cubes.Remove(Cubes[Cubes.Count - 1]);
                 ShrinkCollider();
                 Debug.Log(Cubes.Count);
@@ -103,7 +138,7 @@ public class Character : MonoBehaviour
     {
         foreach (var c in Cubes)
             c.GetComponent<BoxCollider>().isTrigger = true;
-    } 
+    }
 
     public void EnlargeCollider()
     {

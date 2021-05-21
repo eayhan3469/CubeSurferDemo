@@ -10,6 +10,7 @@ TagManager:
   - CollectableCube
   - ObstacleCube
   - Lava
+  - Bridge
   layers:
   - Default
   - TransparentFX
