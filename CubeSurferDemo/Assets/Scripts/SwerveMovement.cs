@@ -55,15 +55,18 @@ public class SwerveMovement : MonoBehaviour
 
     public void CalculateEdges(int direction)
     {
-        if (direction == 0 || direction == 2)
+        if (_road != null)
         {
-            _maxPos = _road.position.x + (_road.localScale.x / 2 - 0.05f);
-            _minPos = _road.position.x + (0.05f - _road.localScale.x / 2);
-        }
-        else if (direction == 1 || direction == 3)
-        {
-            _maxPos = _road.position.z + (_road.localScale.x / 2 - 0.1f);
-            _minPos = _road.position.z + (0.1f - _road.localScale.x / 2);
+            if (direction == 0 || direction == 2)
+            {
+                _maxPos = _road.position.x + (_road.localScale.x / 2 - 0.05f);
+                _minPos = _road.position.x + (0.05f - _road.localScale.x / 2);
+            }
+            else if (direction == 1 || direction == 3)
+            {
+                _maxPos = _road.position.z + (_road.localScale.x / 2 - 0.1f);
+                _minPos = _road.position.z + (0.1f - _road.localScale.x / 2);
+            }
         }
     }
 

@@ -19,7 +19,7 @@ public class CameraController : MonoBehaviour
     {
         if (!_hasZoomOut && Character.Instance.Cubes.Count % 4 == 0) //Recalculate Camera distance from Character based on cube count
         {
-            camTarget.localPosition += camTarget.localPosition.normalized * 5f;
+            camTarget.localPosition += camTarget.localPosition.normalized * 4f;
             _hasZoomOut = true;
         }
         else if (Character.Instance.Cubes.Count % 4 != 0)

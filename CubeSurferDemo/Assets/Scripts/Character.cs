@@ -62,8 +62,11 @@ public class Character : MonoBehaviour
 
     private void Update()
     {
-        Vector3 closestOnGround = _groundCollider.ClosestPointOnBounds(transform.position);
-        LeaveTrail(closestOnGround, cubeObject.transform.localScale.x, trailMaterial);
+        if (GameManager.Instance.HasGameStart && !GameManager.Instance.HasGameOver)
+        {
+            Vector3 closestOnGround = _groundCollider.ClosestPointOnBounds(transform.position);
+            LeaveTrail(closestOnGround, cubeObject.transform.localScale.x, trailMaterial);
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -80,21 +83,13 @@ public class Character : MonoBehaviour
         }
     }
 
-    private void OnCollisionStay(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-
-    }
-
-    private void LeaveTrail(Vector3 point, float scale, Material material)
-    {
-        GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Quad);
-        sphere.transform.localScale = Vector3.one * scale;
-        sphere.transform.position = point + new Vector3(0f, 0.01f, 0f);
-        sphere.transform.rotation = Quaternion.Euler(new Vector3(90f, 0f, 0f));
-        sphere.transform.parent = trailObject;
-        sphere.GetComponent<Collider>().enabled = false;
-        sphere.GetComponent<Renderer>().material = material;
-        Destroy(sphere, 3f);
+        if (other.tag == "Finish")
+        {
+            GameManager.Instance.HasGameOver = true;
+            GameManager.Instance.HasLevelSuccess = true;
+        }
     }
 
     private void OnTriggerStay(Collider other)
@@ -112,6 +107,19 @@ public class Character : MonoBehaviour
             }
         }
     }
+
+    private void LeaveTrail(Vector3 point, float scale, Material material)
+    {
+        GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Quad);
+        sphere.transform.localScale = Vector3.one * scale;
+        sphere.transform.position = point + new Vector3(0f, 0.01f, 0f);
+        sphere.transform.rotation = Quaternion.Euler(new Vector3(90f, 0f, 0f));
+        sphere.transform.parent = trailObject;
+        sphere.GetComponent<Collider>().enabled = false;
+        sphere.GetComponent<Renderer>().material = material;
+        Destroy(sphere, 3f);
+    }
+
 
     public void AddCube()
     {

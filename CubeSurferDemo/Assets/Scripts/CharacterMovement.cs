@@ -33,6 +33,12 @@ public class CharacterMovement : MonoBehaviour
             Character.Instance.IsRotating = false;
         }
 
+        if (GameManager.Instance.HasGameStart && !GameManager.Instance.HasGameOver)
+            MoveForward();
+    }
+
+    private void MoveForward()
+    {
         transform.Translate(Vector3.forward * Time.deltaTime * _speed);
     }
 

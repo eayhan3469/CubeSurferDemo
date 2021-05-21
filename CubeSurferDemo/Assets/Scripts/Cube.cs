@@ -10,6 +10,11 @@ public class Cube : MonoBehaviour
         {
             transform.parent = other.transform;
             Character.Instance.RemoveCube(this);
+
+            if (other.tag == "Altitude")
+            {
+                GameManager.Instance.PointMultiplier++;
+            }
         }
     }
 }
